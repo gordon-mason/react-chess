@@ -1,10 +1,5 @@
-import {King} from "./pieces/King";
-import {BLACK, KING, WHITE} from "./pieces/ChessPiece";
-import {Pawn} from "./pieces/Pawn";
-import {Rook} from "./pieces/Rook";
-import {Knight} from "./pieces/Knight";
-import {Bishop} from "./pieces/Bishop";
-import {Queen} from "./pieces/Queen";
+import {BISHOP, BLACK, KING, KNIGHT, PAWN, QUEEN, ROOK, WHITE} from "./pieces/ChessPiece";
+import {makePiece} from "./pieces/PieceFactory";
 
 export default class ChessModel {
 
@@ -13,11 +8,12 @@ export default class ChessModel {
     player;
     check;
     checkmate;
+    stalemate;
+    pawnHomeRow;
 
     /* Todo :
-    *   refactor this class
-    *   change type of pawns on reaching home row */
-    constructor({board, player, piecesStolen, check, checkmate}) {
+    *   refactor this class */
+    constructor({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate}) {
         if (!board) {
             this._init();
         } else {
@@ -26,6 +22,8 @@ export default class ChessModel {
             this.piecesStolen = Array.from(piecesStolen);
             this.check = check === true;
             this.checkmate = checkmate === true;
+            this.stalemate = stalemate === true;
+            this.pawnHomeRow = pawnHomeRow ? Object.assign(pawnHomeRow) : false;
         }
     }
 
@@ -33,25 +31,27 @@ export default class ChessModel {
         this.player = WHITE;
         this.board = {};
         for (let i = 0; i < 8; i++) {
-            this.board[i + 8] = new Pawn(BLACK);
-            this.board[i + 48] = new Pawn(WHITE);
+            this.board[i + 8] = makePiece(PAWN, BLACK);
+            this.board[i + 48] = makePiece(PAWN, WHITE);
         }
-        this.board[0] = new Rook(BLACK);
-        this.board[1] = new Knight(BLACK);
-        this.board[2] = new Bishop(BLACK);
-        this.board[3] = new Queen(BLACK);
-        this.board[4] = new King(BLACK);
-        this.board[5] = new Bishop(BLACK);
-        this.board[6] = new Knight(BLACK);
-        this.board[7] = new Rook(BLACK);
-        this.board[56] = new Rook(WHITE);
-        this.board[57] = new Knight(WHITE);
-        this.board[58] = new Bishop(WHITE);
-        this.board[59] = new Queen(WHITE);
-        this.board[60] = new King(WHITE);
-        this.board[61] = new Bishop(WHITE);
-        this.board[62] = new Knight(WHITE);
-        this.board[63] = new Rook(WHITE);
+        this.board[8] = makePiece(PAWN, WHITE); /* FIXME REMOVE AFTER TESTING*/
+
+        this.board[0] = makePiece(ROOK, BLACK);
+        this.board[1] = makePiece(KNIGHT, BLACK);
+        this.board[2] = makePiece(BISHOP, BLACK);
+        this.board[3] = makePiece(QUEEN, BLACK);
+        this.board[4] = makePiece(KING, BLACK);
+        this.board[5] = makePiece(BISHOP, BLACK);
+        this.board[6] = makePiece(KNIGHT, BLACK);
+        this.board[7] = makePiece(ROOK, BLACK);
+        this.board[56] = makePiece(ROOK, WHITE);
+        this.board[57] = makePiece(KNIGHT, WHITE);
+        this.board[58] = makePiece(BISHOP, WHITE);
+        this.board[59] = makePiece(QUEEN, WHITE);
+        this.board[60] = makePiece(KING, WHITE);
+        this.board[61] = makePiece(BISHOP, WHITE);
+        this.board[62] = makePiece(KNIGHT, WHITE);
+        this.board[63] = makePiece(ROOK, WHITE);
         this.check = false;
         this.checkmate = false;
         this.piecesStolen = [];
@@ -113,27 +113,60 @@ export default class ChessModel {
         return this.check;
     }
 
-    /**
-     * @param {{from, to}} move
-     * @returns {ChessModel} clone after the move has been made.
-     * A clone of the current state is returned from invalid moves.
-     */
-    nextState(move) {
-        let board, player, piecesStolen, check, checkmate;
+    getPawnHomeRow() {
+        return this.pawnHomeRow ? Object.assign({}, this.pawnHomeRow) : false;
+    }
+
+
+    nextStateAfterPromotion(type) {
+        let board, player, piecesStolen, check, checkmate, pawnHomeRow;
         const reset = () => {
             board = Object.assign({}, this.board);
             player = this.player;
             piecesStolen = this.piecesStolen.slice();
             check = this.check;
             checkmate = this.checkmate;
+            pawnHomeRow = this.getPawnHomeRow();
+        };
+        reset();
+        if (this.pawnHomeRow) {
+            board[this.pawnHomeRow.index] = makePiece(type, board[this.pawnHomeRow.index].getColor());
+            pawnHomeRow = false;
+        }
+
+        return new ChessModel({board, player, piecesStolen, check, checkmate, pawnHomeRow});
+    }
+
+    /**
+     * @param {{from, to}} move
+     * @returns {ChessModel} clone after the move has been made.
+     * A clone of the current state is returned from invalid moves.
+     */
+    nextState(move) {
+        let board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate;
+        const reset = () => {
+            board = Object.assign({}, this.board);
+            player = this.player;
+            piecesStolen = this.piecesStolen.slice();
+            check = this.check;
+            checkmate = this.checkmate;
+            pawnHomeRow = this.getPawnHomeRow();
+            stalemate = this.stalemate;
         };
         reset();
 
-        if (move && ChessModel._isLegalMove(move, this.board, this.player)) {
+        if (move && ChessModel._isLegalMove(move, this.board, this.player) && !pawnHomeRow && !stalemate) {
             this._makeMove(board, move, piecesStolen);
+            if (this._isPawnBackRow(board, move.to)) {
+                pawnHomeRow = {
+                    player: board[move.to].getColor(),
+                    index: move.to
+                }
+            } else {
+                pawnHomeRow = false;
+            }
             player = player === WHITE ? BLACK : WHITE;
-            // TODO handle stalemate
-            const result = this._checkForCheck(board);
+            const result = this._isCheck(board);
             check = result.check;
             if (check) {
                 for (let c of result.details) {
@@ -143,10 +176,13 @@ export default class ChessModel {
                         break;
                     }
                 }
-                checkmate = this._checkForCheckMate(board, player);
+                checkmate = this._isCheckMate(board, player);
+            } else {
+                // If player has no legal moves available at this point it is stalemate
+                stalemate = this._isStalemate(board, player);
             }
         }
-        return new ChessModel({board, player, piecesStolen, check, checkmate});
+        return new ChessModel({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
     }
 
     _makeMove(board, move, piecesStolen) {
@@ -165,7 +201,7 @@ export default class ChessModel {
      * @returns {{details: Array, check: boolean}}
      * @private
      */
-    _checkForCheck(board, player) {
+    _isCheck(board, player) {
         let check = false;
         const details = [];
         // iterate through the pieces on the board
@@ -188,7 +224,7 @@ export default class ChessModel {
         return {check, details};
     }
 
-    _checkForCheckMate(board, defendingPlayer) {
+    _isCheckMate(board, defendingPlayer) {
         console.log('checking for checkmate ' + defendingPlayer);
         for (let piece of Object.keys(board)) {
             // iterate through its legal moves
@@ -198,16 +234,40 @@ export default class ChessModel {
                     // if all of these moves are still in a check situation then we are checkmate.
                     const boardCopy = Object.assign({}, board);
                     this._makeMove(boardCopy, {from: piece, to: target}, []);
-                    if (!this._checkForCheck(boardCopy, defendingPlayer === WHITE ? BLACK : WHITE).check) {
+                    if (!this._isCheck(boardCopy, defendingPlayer === WHITE ? BLACK : WHITE).check) {
                         return false;
                     }
                 }
             }
         }
-        console.log('checkmate!');
         return true;
 
 
     }
-}
 
+    _isPawnBackRow(board, piece) {
+        if (board[piece] && board[piece].getType() === PAWN){
+            const row = parseInt(piece / 8);
+            if (row === 0 && board[piece].getColor() === WHITE) {
+                return true;
+            }
+            if (row === 7 && board[piece].getColor() === BLACK) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    _isStalemate(board, player) {
+        for (let piece of Object.keys(board)) {
+            // iterate through its legal moves
+            if (board[piece].getColor() === player) {
+                /**
+                 * TODO :
+                 *      Refactor board utility functions - allow pieces to exclude moves that would result in check and checkmate (keeping immutability!)
+                 *      return true if the number of legal moves is 0
+                 */
+            }
+        }
+    }
+}

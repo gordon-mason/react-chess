@@ -50,6 +50,14 @@
 	font-size: 32px;
 }
 
+.Pawn-promotion {
+	display: inline-block;
+	width: 20%;
+	height: 20%;
+	font-size: calc(5px + 10vh);
+	margin: 1%;
+}
+
 .Chess-info-panel {
 	background-color: #8585d0;
 	padding: 1%;
@@ -93,5 +101,6 @@
 	.Taken-pieces {
 		border-radius: 2%;
 		width: 640px; /* FIXME */
+		font-size: 48px;
 	}
 }
