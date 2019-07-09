@@ -1,0 +1,65 @@
+.App {
+	text-align: center;
+	min-height: 100vh;
+	margin: 0;
+}
+
+.App-header {
+	background-color: #282c34;
+	min-height: 10vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 3vmin);
+	color: white;
+}
+
+.App-footer {
+	background-color: #282c34;
+	min-height: 3vh;
+	font-size: calc(1px + 2vmin);
+	color: white;
+}
+
+.App-body {
+	min-height: 87vh;
+	background-color: #c4d0ed;
+}
+
+/* The Modal (background) */
+.Chess-menu {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.Chess-menu-content {
+	background-color: #fefefe;
+	margin: 15% auto; /* 15% from the top and centered */
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}

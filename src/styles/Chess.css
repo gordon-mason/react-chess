@@ -1,0 +1,97 @@
+/*
+ TODO: themed stylesheets and
+*/
+.Chess-game {
+	height: 87vh;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.Chess-board {
+	background-color: #aaaaff;
+	padding: 1%;
+	flex: 4;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.Board {
+	width: 384px;
+	height: 384px;
+	padding: 0;
+}
+
+.Board-square {
+	flex: 6;
+	width: 46px; /* FIXME */
+	height: 46px; /* FIXME */
+	background-color: white;
+	border: solid grey 1px;
+	display: inline-block;
+	overflow: hidden;
+	margin-bottom: -3px;
+	font-size: 32px; /* FIXME */
+}
+
+.Chess-piece {
+	text-shadow: 0 0 5px #222;
+	stroke: black;
+	stroke-width: 10;
+}
+
+.Taken-pieces {
+	background-color: #8585d0;
+	border-radius: 2%;
+	width: 384px; /* FIXME */
+	margin: 1%;
+	flex: 2;
+	display: inline-block;
+	font-size: 32px;
+}
+
+.Chess-info-panel {
+	background-color: #8585d0;
+	padding: 1%;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+}
+
+.info-panel {
+	background-color: #d6e1ff;
+	border: dot-dash lightblue 1px;
+	margin: 5%;
+	border-radius: 3%;
+	flex: 1;
+}
+
+.info-panel-white {
+	background-color: white;
+	color: black;
+}
+
+.info-panel-black {
+	background-color: black;
+	color: white;
+}
+
+@media only screen and (min-width: 1000px) and (min-height: 800px) {
+
+	.Board {
+		width: 640px; /* FIXME */
+		height: 640px; /* FIXME */
+		padding: 0;
+	}
+
+	.Board-square {
+		width: 78px;
+		height: 78px;
+		font-size: 64px;
+	}
+
+	.Taken-pieces {
+		border-radius: 2%;
+		width: 640px; /* FIXME */
+	}
+}
