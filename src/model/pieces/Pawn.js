@@ -1,4 +1,5 @@
-import {BLACK, ChessPiece, WHITE} from "./ChessPiece";
+import {ChessPiece} from "./ChessPiece";
+import {BLACK, WHITE} from "../constants";
 
 export class Pawn extends ChessPiece {
 

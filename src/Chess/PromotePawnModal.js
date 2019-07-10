@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Chess.css';
-import {BISHOP, KNIGHT, QUEEN, ROOK} from "../model/pieces/ChessPiece";
 import {ChessPiece} from "./Board/ChessPiece";
+import {BISHOP, KNIGHT, QUEEN, ROOK} from "../model/constants";
 
 export default class PromotePawnModal extends React.Component {
 

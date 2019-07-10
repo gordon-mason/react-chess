@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faChessPawn, faChessQueen, faChessRook, faChessBishop, faChessKnight, faChessKing} from '@fortawesome/free-solid-svg-icons';
-import {BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK} from "../../model/pieces/ChessPiece";
+import {BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK} from "../../model/constants";
 
 const pieceIconMap = {};
 pieceIconMap[PAWN] = faChessPawn;

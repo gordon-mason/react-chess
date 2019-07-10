@@ -1,10 +1,10 @@
-import {BISHOP, BLACK, KING, KNIGHT, PAWN, QUEEN, ROOK, WHITE} from "./ChessPiece";
 import {Pawn} from "./Pawn";
 import {King} from "./King";
 import {Queen} from "./Queen";
 import {Rook} from "./Rook";
 import {Bishop} from "./Bishop";
 import {Knight} from "./Knight";
+import {BISHOP, BLACK, KING, KNIGHT, PAWN, QUEEN, ROOK, WHITE} from "../constants";
 
 export const makePiece = (type, color) => {
     if (!(color === WHITE || color === BLACK)) {

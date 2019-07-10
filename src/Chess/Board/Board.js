@@ -1,7 +1,7 @@
 import React from "react";
 import {Square} from "./Square";
-import {BLACK, WHITE} from "../../model/pieces/ChessPiece";
 import {ChessPiece} from "./ChessPiece";
+import {BLACK, WHITE} from "../../model/constants";
 
 export class Board extends React.Component {
 

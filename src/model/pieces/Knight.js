@@ -1,5 +1,5 @@
 import {ChessPiece} from "./ChessPiece";
-import ChessModel from "../ChessModel";
+import utils from "../ChessBoardUtils";
 
 export class Knight extends ChessPiece {
 
@@ -16,7 +16,7 @@ export class Knight extends ChessPiece {
         pieceIndex = +pieceIndex;
         const legalMoves = [];
         const checkSquare = (index) => {
-            if (ChessModel._isLegalBounds(index) && !board[index]) {
+            if (utils._isLegalBounds(index) && !board[index]) {
                 legalMoves.push(index);
             } else if (board[index] && board[index].getColor() !== this.color) {
                 legalMoves.push(index);

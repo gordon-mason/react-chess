@@ -2,9 +2,9 @@ import React from 'react';
 import '../styles/Chess.css';
 import ChessModel from "../model/ChessModel";
 import {Board} from "./Board/Board";
-import {WHITE} from "../model/pieces/ChessPiece";
 import ChessMenu from "./ChessMenu";
 import PromotePawnModal from "./PromotePawnModal";
+import {WHITE} from "../model/constants";
 
 export default class ChessGame extends React.Component {
 
