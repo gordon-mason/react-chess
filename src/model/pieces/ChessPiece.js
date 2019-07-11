@@ -60,10 +60,10 @@ export class IntervalChessPiece extends ChessPiece {
             }
             for (let n = 1; n < limit; n++) {
                 let nextStep = pieceIndex + (step * n);
-                if (utils._isLegalBounds(nextStep) && !board[nextStep]) {
+                if (utils.isLegalBounds(nextStep) && !board[nextStep]) {
                     legalMoves.push(nextStep);
                 } else {
-                    if (utils._isLegalBounds(nextStep) && board[nextStep] && board[nextStep].getColor() !== this.color) {
+                    if (utils.isLegalBounds(nextStep) && board[nextStep] && board[nextStep].getColor() !== this.color) {
                         legalMoves.push(nextStep);
                     }
                     break;

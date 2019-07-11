@@ -30,3 +30,29 @@ export const makePiece = (type, color) => {
     }
     throw new Error('Type of piece ' + type + ' is not defined');
 };
+
+export const makeNewGameBoard = () => {
+    const board = {};
+    for (let i = 0; i < 8; i++) {
+        board[i + 8] = makePiece(PAWN, BLACK);
+        board[i + 48] = makePiece(PAWN, WHITE);
+    }
+
+    board[0] = makePiece(ROOK, BLACK);
+    board[1] = makePiece(KNIGHT, BLACK);
+    board[2] = makePiece(BISHOP, BLACK);
+    board[3] = makePiece(QUEEN, BLACK);
+    board[4] = makePiece(KING, BLACK);
+    board[5] = makePiece(BISHOP, BLACK);
+    board[6] = makePiece(KNIGHT, BLACK);
+    board[7] = makePiece(ROOK, BLACK);
+    board[56] = makePiece(ROOK, WHITE);
+    board[57] = makePiece(KNIGHT, WHITE);
+    board[58] = makePiece(BISHOP, WHITE);
+    board[59] = makePiece(QUEEN, WHITE);
+    board[60] = makePiece(KING, WHITE);
+    board[61] = makePiece(BISHOP, WHITE);
+    board[62] = makePiece(KNIGHT, WHITE);
+    board[63] = makePiece(ROOK, WHITE);
+    return board;
+};
