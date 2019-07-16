@@ -7,7 +7,7 @@ export default {
      * @param board
      * @param player
      * @returns {boolean}
-     * @private
+     * 
      */
     hasNoMoves(board, player) {
         for (let piece of Object.keys(board)) {
@@ -30,7 +30,7 @@ export default {
      * @param board
      * @param piece
      * @returns {boolean}
-     * @private
+     * 
      */
     isPawnBackRow(board, piece) {
         if (board[piece] && board[piece].getType() === PAWN){
@@ -46,11 +46,11 @@ export default {
     },
 
     /**
-     *
+     * Returns a list of pieces that can take the king of the opposite color
      * @param board
-     * @param player optional parameter specifying which player
-     * @returns {{details: Array, check: boolean}}
-     * @private
+     * @param player optional parameter specifying which players pieces to check
+     * @returns {{details: [ {advantagePlayer, piece, index}... ], check: boolean}}
+     * 
      */
     isCheck(board, player) {
         let check = false;
@@ -64,7 +64,7 @@ export default {
                     if (board[target] && board[target].getType() === KING && board[target].getColor() !== board[piece].getColor()) {
                         check = true;
                         details.push({
-                            checkMove: board[piece].getColor(),
+                            advantagePlayer: board[piece].getColor(),
                             piece: board[piece].getType(),
                             index: piece,
                         });
@@ -76,11 +76,11 @@ export default {
     },
 
     /**
-     * Warning - has effects on board
+     * Warning - has effects on board and does not check if the move is legal
      * @param board
      * @param move
      * @param piecesStolen
-     * @private
+     * 
      */
     makeMove(board, move, piecesStolen) {
         if (board[move.to]) {
@@ -105,5 +105,30 @@ export default {
         return (index >= 0 && index <= 63);
     },
 
+    /**
+     * List all the moves available to the player
+     * @param board
+     * @param player
+     * @returns {Array}
+     */
+    listMoves(board, player) {
+        return this.removeCheckMoves(Object.keys(board).filter((piece) => (board[piece].getColor() === player))
+            .reduce((moves, piece) => (moves.concat(
+                board[piece].legalMoves(piece, board, player).map(to => ({from: piece, to}))
+            )), []), board, player);
+    },
+
+
+    removeCheckMoves(moves, board, player) {
+        const newMoves = [];
+        for (let move of moves) {
+            const boardClone = Object.assign({}, board);
+            this.makeMove(boardClone, move, []);
+            if (!this.isCheck(boardClone, player === WHITE ? BLACK : WHITE).check) {
+                newMoves.push(move);
+            }
+        }
+        return newMoves;
+    }
 
 }

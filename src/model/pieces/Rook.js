@@ -1,8 +1,9 @@
 import {IntervalChessPiece} from "./ChessPiece";
+import {ROOK} from "../constants";
 
 export class Rook extends IntervalChessPiece {
     getType() {
-        return 'Rook';
+        return ROOK;
     }
 
     checkSquaresAtIntervals(checkSquares) {

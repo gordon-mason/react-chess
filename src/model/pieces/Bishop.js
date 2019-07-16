@@ -1,9 +1,10 @@
 import {IntervalChessPiece} from "./ChessPiece";
+import {BISHOP} from "../constants";
 
 export class Bishop extends IntervalChessPiece {
 
     getType() {
-        return 'Bishop';
+        return BISHOP;
     }
 
     checkSquaresAtIntervals(checkSquares) {

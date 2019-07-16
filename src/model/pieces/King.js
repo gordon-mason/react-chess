@@ -1,10 +1,10 @@
-
 import {ChessPiece} from "./ChessPiece";
 import utils from "../ChessBoardUtils";
+import {KING} from "../constants";
 
 export class King extends ChessPiece {
     getType() {
-        return 'King';
+        return KING;
     }
 
     legalMoves(pieceIndex, board, currentPlayer) {

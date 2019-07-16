@@ -2,7 +2,7 @@ import {makeNewGameBoard, makePiece} from "./pieces/PieceFactory";
 import Utils from './ChessBoardUtils';
 import {BLACK, WHITE} from "./constants";
 
-export default class ChessModel {
+export default class ChessMatch {
 
     board; // {0:{ChessPiece},15:{ChessPiece}...}
     piecesStolen; // []
@@ -50,12 +50,12 @@ export default class ChessModel {
 
     /**
      * @param {{from, to}} move
-     * @returns {ChessModel} clone after the move has been made.
+     * @returns {ChessMatch} clone after the move has been made.
      * A clone of the current state is returned from invalid moves.
      */
-    nextState(move) {
+    nextStateAfterMove(move) {
         let {board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate} = this._cloneState();
-        if (move && Utils.isLegalMove(move, this.board, this.player) && !pawnHomeRow && !checkmate && !stalemate) {
+        if (move && Utils.isLegalMove(move, board, player) && !pawnHomeRow && !checkmate && !stalemate) {
             Utils.makeMove(board, move, piecesStolen);
             if (Utils.isPawnBackRow(board, move.to)) {
                 pawnHomeRow = {
@@ -71,7 +71,7 @@ export default class ChessModel {
             if (check) {
                 for (let c of result.details) {
                     // if the attempted move would result in check, or fail to protect the king from check it is illegal
-                    if (c.checkMove === player) {
+                    if (c.advantagePlayer === player) {
                         const state = this._cloneState();
                         board = state.board;
                         player = state.player;
@@ -87,7 +87,7 @@ export default class ChessModel {
                 stalemate = Utils.hasNoMoves(board, player);
             }
         }
-        return new ChessModel({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
+        return new ChessMatch({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
     }
 
     nextStateAfterPromotion(type) {
@@ -105,7 +105,7 @@ export default class ChessModel {
             }
         }
 
-        return new ChessModel({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
+        return new ChessMatch({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
     }
 
 

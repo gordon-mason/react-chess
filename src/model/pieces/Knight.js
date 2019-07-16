@@ -1,12 +1,13 @@
 import {ChessPiece} from "./ChessPiece";
 import utils from "../ChessBoardUtils";
+import {KNIGHT} from "../constants";
 
 export class Knight extends ChessPiece {
 
     // interval = [-17, -15, -10, -6, 6, 10, 15, 17];
 
     getType() {
-        return 'Knight';
+        return KNIGHT;
     }
 
     legalMoves(pieceIndex, board, currentPlayer) {

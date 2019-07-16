@@ -1,14 +1,16 @@
 import React from 'react';
 import '../styles/Chess.css';
-import ChessModel from "../model/ChessModel";
+import ChessMatch from "../model/ChessMatch";
 import {Board} from "./Board/Board";
 import ChessMenu from "./ChessMenu";
 import PromotePawnModal from "./PromotePawnModal";
-import {WHITE} from "../model/constants";
+import {BLACK, WHITE} from "../model/constants";
+import {SinglePlayerChessMatch} from "../model/SinglePlayerChessMatch";
+import {RandomPlayer} from "../model/ai/RandomPlayer";
 
 export default class ChessGame extends React.Component {
 
-	state = {model: new ChessModel({}), newGame: true};
+	state = {model: new ChessMatch({}), newGame: true};
 
 	render() {
 		let panelClass = 'info-panel info-panel-';
@@ -43,13 +45,18 @@ export default class ChessGame extends React.Component {
 	startMatch = ({singlePlayer, localMatch, networkMatch,
 					  name1, name2, name1isWhite, aiDifficulty, timeLimit}) => {
 		if (singlePlayer) {
-			this.setState({newGame: false, model: new ChessModel({})});
+			this.setState({newGame: false, model: new SinglePlayerChessMatch({},
+					new RandomPlayer('Name', name1isWhite ? BLACK : WHITE))});
+		} else if (localMatch) {
+			this.setState({newGame: false, model: new ChessMatch({})});
+		} else if (networkMatch) {
+			alert('Network match not implemented');
 		}
 	};
 
 	onMove = async (move) => {
 		await this.setState(prevState => {
-			const model = prevState.model.nextState(move);
+			const model = prevState.model.nextStateAfterMove(move);
 			const newGame = model.isGameOver();
 			return {model, newGame};
 		});

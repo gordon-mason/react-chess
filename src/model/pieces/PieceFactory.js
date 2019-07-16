@@ -31,6 +31,8 @@ export const makePiece = (type, color) => {
     throw new Error('Type of piece ' + type + ' is not defined');
 };
 
+export const promotionPieces = [QUEEN, ROOK, BISHOP, KNIGHT];
+
 export const makeNewGameBoard = () => {
     const board = {};
     for (let i = 0; i < 8; i++) {
