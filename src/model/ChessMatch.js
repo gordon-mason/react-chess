@@ -12,7 +12,7 @@ export default class ChessMatch {
     stalemate; // bool
     pawnForPromotion; // false || {player, index: 0 to 63}
 
-    constructor({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate}) {
+    constructor({board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate}) {
         if (!board) {
             this._init();
         } else {
@@ -22,7 +22,7 @@ export default class ChessMatch {
             this.check = check === true;
             this.checkmate = checkmate === true;
             this.stalemate = stalemate === true;
-            this.pawnForPromotion = pawnHomeRow ? Object.assign(pawnHomeRow) : false;
+            this.pawnForPromotion = pawnForPromotion ? Object.assign(pawnForPromotion) : false;
         }
     }
 
@@ -37,15 +37,15 @@ export default class ChessMatch {
     }
 
     _cloneState() {
-        let board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate;
+        let board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate;
         board = Object.assign({}, this.board);
         player = this.player;
         piecesStolen = this.piecesStolen.slice();
         check = this.check;
         checkmate = this.checkmate;
-        pawnHomeRow = this.getPawnForPromotion();
+        pawnForPromotion = this.getPawnForPromotion();
         stalemate = this.stalemate;
-        return {board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate};
+        return {board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate};
     }
 
     /**
@@ -54,16 +54,16 @@ export default class ChessMatch {
      * A clone of the current state is returned from invalid moves.
      */
     nextStateAfterMove(move) {
-        let {board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate} = this._cloneState();
-        if (move && Utils.isLegalMove(move, board, player) && !pawnHomeRow && !checkmate && !stalemate) {
+        let {board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate} = this._cloneState();
+        if (move && Utils.isLegalMove(move, board, player) && !pawnForPromotion && !checkmate && !stalemate) {
             Utils.makeMove(board, move, piecesStolen);
             if (Utils.isPawnBackRow(board, move.to)) {
-                pawnHomeRow = {
+                pawnForPromotion = {
                     player: board[move.to].getColor(),
                     index: move.to
                 }
             } else {
-                pawnHomeRow = false;
+                pawnForPromotion = false;
             }
             player = player === WHITE ? BLACK : WHITE;
             const result = Utils.isCheck(board);
@@ -78,7 +78,7 @@ export default class ChessMatch {
                         piecesStolen = state.piecesStolen;
                         check = state.check;
                         checkmate = state.checkmate;
-                        pawnHomeRow = state.pawnHomeRow;
+                        pawnForPromotion = state.pawnForPromotion;
                         break;
                     }
                 }
@@ -87,14 +87,14 @@ export default class ChessMatch {
                 stalemate = Utils.hasNoMoves(board, player);
             }
         }
-        return new ChessMatch({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
+        return new ChessMatch({board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate});
     }
 
     nextStateAfterPromotion(type) {
-        let {board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate} = this._cloneState();
+        let {board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate} = this._cloneState();
         if (this.pawnForPromotion) {
             board[this.pawnForPromotion.index] = makePiece(type, board[this.pawnForPromotion.index].getColor());
-            pawnHomeRow = false;
+            pawnForPromotion = false;
             const result = Utils.isCheck(board);
             check = result.check;
             if (check) {
@@ -105,7 +105,7 @@ export default class ChessMatch {
             }
         }
 
-        return new ChessMatch({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
+        return new ChessMatch({board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate});
     }
 
 

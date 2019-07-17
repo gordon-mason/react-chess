@@ -20,8 +20,9 @@ export default class PromotePawnModal extends React.Component {
 
     _renderPawnSelector() {
         const selections = [];
+        let i = 0;
         for (let type of this.types) {
-            selections.push(<div className='Pawn-promotion' onClick={this._createSelectionFunction(type)}>
+            selections.push(<div className='Pawn-promotion' onClick={this._createSelectionFunction(type)} key={i++}>
                 <ChessPiece color={this.props.color} type={type} />
             </div>)
         }

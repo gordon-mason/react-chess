@@ -7,8 +7,8 @@ export class SinglePlayerChessMatch extends ChessMatch {
      */
     aiPlayer;
 
-    constructor({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate}, aiPlayer) {
-        super({board, player, piecesStolen, check, checkmate, pawnHomeRow, stalemate});
+    constructor({board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate}, aiPlayer) {
+        super({board, player, piecesStolen, check, checkmate, pawnForPromotion, stalemate});
         if (!aiPlayer) {
             throw new Error('single player match requires an AIPlayer');
         }
