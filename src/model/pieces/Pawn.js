@@ -1,4 +1,5 @@
-import {BLACK, ChessPiece, WHITE} from "./ChessPiece";
+import {ChessPiece} from "./ChessPiece";
+import {BLACK, PAWN, WHITE} from "../constants";
 
 export class Pawn extends ChessPiece {
 
@@ -8,7 +9,7 @@ export class Pawn extends ChessPiece {
     }
 
     getType() {
-        return 'Pawn';
+        return PAWN;
     }
 
     legalMoves(pieceIndex, board, currentPlayer) {

@@ -51,7 +51,7 @@ export default class ChessMenu extends React.Component {
                 {this._renderBackButton()}
                 <label>
                     Name:
-                    <input type="text" name="name" value={this.state.name}
+                    <input type="text" name="name" value={this.state.name1}
                            onChange={(event) => {this.setState({name1: event.target.value}); }} />
                 </label>
                 <div>AI type (option select)</div>

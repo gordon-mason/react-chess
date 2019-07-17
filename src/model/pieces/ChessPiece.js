@@ -1,14 +1,8 @@
-import ChessModel from "../ChessModel";
+import utils from "../ChessBoardUtils";
 
-export const BLACK = 'Black';
-export const WHITE = 'White';
-export const PAWN = 'Pawn';
-export const KING = 'King';
-export const QUEEN = 'Queen';
-export const BISHOP = 'Bishop';
-export const KNIGHT = 'Knight';
-export const ROOK = 'Bishop';
-
+/**
+ * An interface representing operations on a ChessPiece. ChessPieces should be immutable (no setters or changes to data)
+ */
 export class ChessPiece {
 
     color;
@@ -34,14 +28,14 @@ export class ChessPiece {
     }
 }
 
-/*
-* A class for pieces that move any number of steps in a straight line or diagonally across the chess board.
+
+const leftMoves = [-9, -1, 7];
+const rightMoves = [9, 1, -7];
+
+/**
+* A class for pieces that move any number of steps in a straight line or diagonally across the chess board (Queen, Rook, Bishop).
 * */
 export class IntervalChessPiece extends ChessPiece {
-
-
-    leftMoves = [-9, -1, 7];
-    rightMoves = [9, 1, -7];
 
     /**
      * Fixed template method - subclasses should define behaviour in checkSquaresAtIntervals
@@ -60,19 +54,19 @@ export class IntervalChessPiece extends ChessPiece {
             let limit;
             if (step % 8 === 0) {
                 limit = 8;
-            } else if (this.leftMoves.includes(step)) {
+            } else if (leftMoves.includes(step)) {
                 limit = pieceIndex % 8 + 1;
-            } else if (this.rightMoves.includes(step)) {
+            } else if (rightMoves.includes(step)) {
                 limit = 8 - pieceIndex % 8;
             } else {
                 throw new Error('invalid value given to checkSquares - argument must be one of: -9, -8, -7, -1, 1, 7, 8, 9');
             }
             for (let n = 1; n < limit; n++) {
                 let nextStep = pieceIndex + (step * n);
-                if (ChessModel._isLegalBounds(nextStep) && !board[nextStep]) {
+                if (utils.isLegalBounds(nextStep) && !board[nextStep]) {
                     legalMoves.push(nextStep);
                 } else {
-                    if (ChessModel._isLegalBounds(nextStep) && board[nextStep] && board[nextStep].getColor() !== this.color) {
+                    if (utils.isLegalBounds(nextStep) && board[nextStep] && board[nextStep].getColor() !== this.color) {
                         legalMoves.push(nextStep);
                     }
                     break;

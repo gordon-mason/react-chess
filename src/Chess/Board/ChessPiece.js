@@ -1,14 +1,15 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faChessPawn, faChessQueen, faChessRook, faChessBishop, faChessKnight, faChessKing} from '@fortawesome/free-solid-svg-icons';
+import {BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK} from "../../model/constants";
 
 const pieceIconMap = {};
-pieceIconMap['Pawn'] = faChessPawn;
-pieceIconMap['Queen'] = faChessQueen;
-pieceIconMap['Rook'] = faChessRook;
-pieceIconMap['King'] = faChessKing;
-pieceIconMap['Bishop'] = faChessBishop;
-pieceIconMap['Knight'] = faChessKnight;
+pieceIconMap[PAWN] = faChessPawn;
+pieceIconMap[QUEEN] = faChessQueen;
+pieceIconMap[ROOK] = faChessRook;
+pieceIconMap[KING] = faChessKing;
+pieceIconMap[BISHOP] = faChessBishop;
+pieceIconMap[KNIGHT] = faChessKnight;
 
 
 export class ChessPiece extends React.Component {
